@@ -19,6 +19,9 @@ while choice != "q":
 	print "  4) View DHCP Reservations"
 	print " Hyper-V"
 	print "  5) View a list of VMs"
+	print "Linux"
+	print " Services"
+	print "  6) Restart a service by name"
 	print "=============================="
 	print "Exit"
 	print "  q) Quit"
@@ -47,6 +50,11 @@ while choice != "q":
 		serverName = raw_input("Windows Server IP or Hostname: ")
 		serverUser = raw_input("Windows Server Username: ")
 		subprocess.call(["fab -f fab_functions.py getVMs --hosts=%s --user=%s" % (serverName, serverUser)], shell=True)
+	if choice == "6":
+		hostname = raw_input("IP or Hostname: ")
+		user = raw_input("Username: ")
+		service = raw_input("Service name to restart: ")
+		subprocess.call(["fab -f fab_functions.py restartServiceLinux:%s --hosts=%s --user=%s" % (service, hostname, user)], shell=True)
 
 # Print the goodbye message
 print "\nGoodbye!\n"

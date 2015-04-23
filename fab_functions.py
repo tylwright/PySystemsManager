@@ -14,3 +14,6 @@ def getIPv4Reservations(scopeId):
 def addHost(ip, mac, hostname):
 	run("PowerShell.exe -Command Add-DhcpServerv4Reservation -ScopeId 10.1.1.0 -IPAddress %s -ClientId %s -Description %s -ReservationName %s" % (ip, mac, hostname, hostname), shell=False, pty=False)
 	#run("Add-DnsServerResourceRecordA -ZoneName grid.labs -Name $Name -ComputerName $name -IPv4Address $IP -CreatePtr")
+
+def restartServiceLinux(serviceName):
+	run("service %s restart" % serviceName)
