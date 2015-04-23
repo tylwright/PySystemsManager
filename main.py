@@ -16,8 +16,9 @@ while choice != "q":
 	print "  1) Add host to DHCP and DNS"
 	print "  2) Add DNS record"
 	print "  3) Add DHCP reservation"
+	print "  4) View DHCP Reservations"
 	print " Hyper-V"
-	print "  4) View a list of VMs"
+	print "  5) View a list of VMs"
 	print "=============================="
 	print "Exit"
 	print "  q) Quit"
@@ -38,6 +39,11 @@ while choice != "q":
 			else:
 				addHost = False
 	if choice == "4":
+		serverName = raw_input("Windows Server IP or Hostname: ")
+		serverUser = raw_input("Windows Server Username: ")
+		scopeId = raw_input("What scope would you like to look at? ")
+		subprocess.call(["fab -f fab_functions.py getIPv4Reservations:%s --hosts=%s --user=%s" % (scopeId, serverName, serverUser)], shell=True)
+	if choice == "5":
 		serverName = raw_input("Windows Server IP or Hostname: ")
 		serverUser = raw_input("Windows Server Username: ")
 		subprocess.call(["fab -f fab_functions.py getVMs --hosts=%s --user=%s" % (serverName, serverUser)], shell=True)
