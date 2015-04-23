@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from fabric.api import env, run, hide
 
-def getVMState():
+def getVMs():
 	with hide('output','running','warnings'):
     		log = run("PowerShell.exe -Command Get-VM | Select Name, State", shell=False, pty=False)
 		print log

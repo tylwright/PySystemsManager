@@ -11,9 +11,13 @@ while choice != "q":
 	print "\n=============================="
 	print "=======PySystemsManager======="
 	print "=============================="
-	print "Windows DHCP/DNS Server"
-	print "Host Management"
+	print "Windows Server"
+	print " Host Management"
 	print "  1) Add host to DHCP and DNS"
+	print "  2) Add DNS record"
+	print "  3) Add DHCP reservation"
+	print " Hyper-V"
+	print "  4) View a list of VMs"
 	print "=============================="
 	print "Exit"
 	print "  q) Quit"
@@ -33,6 +37,10 @@ while choice != "q":
 				addHost = True
 			else:
 				addHost = False
+	if choice == "4":
+		serverName = raw_input("Windows Server IP or Hostname: ")
+		serverUser = raw_input("Windows Server Username: ")
+		subprocess.call(["fab -f fab_functions.py getVMs --hosts=%s --user=%s" % (serverName, serverUser)], shell=True)
 
 # Print the goodbye message
 print "\nGoodbye!\n"
