@@ -38,13 +38,15 @@ def addHostDHCPDNS():
 		hostname = raw_input("Hostname: ")
 		mac = raw_input("MAC Address: ")
 		ip = raw_input("IP: ")
-		subprocess.call(["fab -f fab_functions.py addHost:%s,%s,%s --hosts=%s --user=%s --password=%s" % (ip,mac,hostname, serverName, serverUser, serverUserPass)], shell=True)
-	addHost = raw_input("%s, Would you like to add another DHCP reservation/DNS record to %s? [Y/N]" % (serverUser, serverName))
-	addHost = addHost.lower()
-	if addHost == "y":
-		addHost = True
-	else:
-		addHost = False
+		scope = raw_input("DHCP Scope for Reservation: ")
+		zone = raw_input("DNS Zone Name: ")
+		subprocess.call(["fab -f fab_functions.py addHost:%s,%s,%s,%s,%s --hosts=%s --user=%s --password=%s" % (ip, mac, hostname, scope, zone, serverName, serverUser, serverUserPass)], shell=True)
+		addHost = raw_input("%s, would you like to add another DHCP reservation/DNS record to %s? [Y/N]" % (serverUser, serverName))
+		addHost = addHost.lower()
+		if addHost == "y":
+			addHost = True
+		else:
+			addHost = False
 
 def viewDHCPReservations():
 	"""

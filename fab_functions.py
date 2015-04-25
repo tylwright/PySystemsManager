@@ -19,12 +19,12 @@ def getIPv4Reservations(scopeId):
     		log = run("PowerShell.exe -Command Get-DhcpServerv4Reservation -ScopeId %s" % scopeId, shell=False, pty=False)
 		print log
 		
-def addHost(ip, mac, hostname):
+def addHost(ip, mac, hostname, scope, zone):
 	"""
 	;Description - Adds a host to DHCP and DNS on a Windows box.
 	"""
-	run("PowerShell.exe -Command Add-DhcpServerv4Reservation -ScopeId 10.1.1.0 -IPAddress %s -ClientId %s -Description %s -ReservationName %s" % (ip, mac, hostname, hostname), shell=False, pty=False)
-	#run("Add-DnsServerResourceRecordA -ZoneName grid.labs -Name $Name -ComputerName $name -IPv4Address $IP -CreatePtr")
+	run("PowerShell.exe -Command Add-DhcpServerv4Reservation -ScopeId %s -IPAddress %s -ClientId %s -Description %s -ReservationName %s" % (scope, ip, mac, hostname, hostname), shell=False, pty=False)
+	run("PowerShell.exe Add-DnsServerResourceRecordA -ZoneName %s -Name %s -IPv4Address %s -CreatePtr" % (zone, hostname, ip), shell=False, pty=False)
 
 def restartServiceLinux(serviceName):
 	"""
