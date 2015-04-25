@@ -28,6 +28,17 @@ def getWindowsCredentials():
 	serverUserPass = getpass.getpass("Password for %s: " % serverUser)
 	return (serverName, serverUser, serverUserPass)
 
+def getMAC():
+	mac = raw_input("MAC Address: ")
+	mac = mac.lower()
+	mac = re.sub('[-:]', '', mac)
+	if re.match("[0-9a-f]{12}", mac):
+		return mac
+	else:
+		print "Invalid MAC"
+		getMAC()
+
+
 def addHostDHCPDNS():
 	"""
 	;Description - Asks user for hostname, MAC, and IP.  Adds info to Windows DHCP/DNS records.
@@ -36,10 +47,10 @@ def addHostDHCPDNS():
 	addHost = True
 	while addHost:
 		hostname = raw_input("Hostname: ")
-		mac = raw_input("MAC Address: ")
+		mac = getMAC()
 		ip = raw_input("IP: ")
-		scope = raw_input("DHCP Scope for Reservation: ")
-		zone = raw_input("DNS Zone Name: ")
+		scope = raw_input("DHCP Scope for Reservation (ex. 10.1.1.0): ")
+		zone = raw_input("DNS Zone Name (ex. mycompany.corp): ")
 		subprocess.call(["fab -f fab_functions.py addHost:%s,%s,%s,%s,%s --hosts=%s --user=%s --password=%s" % (ip, mac, hostname, scope, zone, serverName, serverUser, serverUserPass)], shell=True)
 		addHost = raw_input("%s, would you like to add another DHCP reservation/DNS record to %s? [Y/N]" % (serverUser, serverName))
 		addHost = addHost.lower()

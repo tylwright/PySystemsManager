@@ -47,5 +47,5 @@ def mainMenu():
 			subprocess.call(["fab -f fab_functions.py restartServiceLinux:%s --hosts=%s --user=%s" % (service, hostname, user)], shell=True)
 		choice = askExitToMenu()
 	
-# Display the main menu with options	
+# Display the main menu with options
 mainMenu()
