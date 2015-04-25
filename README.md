@@ -1,7 +1,8 @@
 # PySystemsManager
 A simple Python script used to SSH into boxes and complete tasks.
 
-<img src='http://i.imgur.com/6WNbQWx.gif?1' width='500px'/>
+<img src='http://i.imgur.com/TEgTdax.gif' width='500px'/>
+<figcaption>Example for Windows DHCP/DNS add host</figcaption>
 
 <h3>Requirements</h3>
 <ul>

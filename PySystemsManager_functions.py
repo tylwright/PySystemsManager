@@ -38,7 +38,6 @@ def getMAC():
 		print "Invalid MAC"
 		getMAC()
 
-
 def addHostDHCPDNS():
 	"""
 	;Description - Asks user for hostname, MAC, and IP.  Adds info to Windows DHCP/DNS records.
@@ -84,6 +83,7 @@ def askExitToMenu():
 	exitToMenu = exitToMenu.lower()
 	if exitToMenu == "q":
 		choice = "q"
+		goodbye()
 	else:
 		choice = "1111"
 	return choice
