@@ -10,11 +10,15 @@ from time import sleep
 
 def clearScreen():
 	os.system("clear")
-
-def addHostDHCPDNS():
+	
+def getWindowsCredentials():
 	serverName = raw_input("Windows Server IP or Hostname: ")
 	serverUser = raw_input("Windows Server Username: ")
 	serverUserPass = getpass.getpass("Password for %s: " % serverUser)
+	return (serverName, serverUser, serverUserPass)
+
+def addHostDHCPDNS():
+	serverName, serverUser, serverUserPass = getWindowsCredentials()
 	addHost = True
 	while addHost:
 		hostname = raw_input("Hostname: ")
@@ -29,11 +33,17 @@ def addHostDHCPDNS():
 			addHost = False
 			mainMenu()
 
+def viewDHCPReservations():
+		serverName, serverUser, serverUserPass = getWindowsCredentials()
+		scopeId = raw_input("What scope would you like to look at? ")
+		subprocess.call(["fab -f fab_functions.py getIPv4Reservations:%s --hosts=%s --user=%s --password=%s" % (scopeId, serverName, serverUser, serverUserPass)], shell=True)
+
+
 def mainMenu():
-	clearScreen()
 	# Setting initial choice value
 	choice = "1111"
 	while choice != "q":
+		clearScreen()
 		print "\n=============================="
 		print "=======PySystemsManager======="
 		print "=============================="
@@ -52,19 +62,21 @@ def mainMenu():
 		print "Exit"
 		print "  q) Quit"
 		print "==============================\n"
-		while len(choice) != 1:
-			choice = raw_input("Choose an option: ")
-			if len(choice) != 1:
-				print "Invalid choice"
+		choice = raw_input("Choice: ")
 		choice = choice.lower()
 		clearScreen()
 		if choice == "1":
 			addHostDHCPDNS()
+			exitToMenu = raw_input("Return to main menu [Y] or quit [Q]? ")
+			exitToMenu = exitToMenu.lower()
+			if exitToMenu == "q":
+				choice = "q"
 		if choice == "4":
-			serverName = raw_input("Windows Server IP or Hostname: ")
-			serverUser = raw_input("Windows Server Username: ")
-			scopeId = raw_input("What scope would you like to look at? ")
-			subprocess.call(["fab -f fab_functions.py getIPv4Reservations:%s --hosts=%s --user=%s" % (scopeId, serverName, serverUser)], shell=True)
+			viewDHCPReservations()
+			exitToMenu = raw_input("Return to main menu [Y] or quit [Q]? ")
+			exitToMenu = exitToMenu.lower()
+			if exitToMenu == "q":
+				choice = "q"
 		if choice == "5":
 			serverName = raw_input("Windows Server IP or Hostname: ")
 			serverUser = raw_input("Windows Server Username: ")
