@@ -1,6 +1,8 @@
 # PySystemsManager
 A simple Python script used to SSH into boxes and complete tasks.
 
+<img src='http://i.imgur.com/6WNbQWx.gif?1' width='500px'/>
+
 <h3>Requirements</h3>
 <ul>
 	<li>Python</li>

@@ -23,8 +23,11 @@ def addHost(ip, mac, hostname, scope, zone):
 	"""
 	;Description - Adds a host to DHCP and DNS on a Windows box.
 	"""
-	run("PowerShell.exe -Command Add-DhcpServerv4Reservation -ScopeId %s -IPAddress %s -ClientId %s -Description %s -ReservationName %s" % (scope, ip, mac, hostname, hostname), shell=False, pty=False)
-	run("PowerShell.exe Add-DnsServerResourceRecordA -ZoneName %s -Name %s -IPv4Address %s -CreatePtr" % (zone, hostname, ip), shell=False, pty=False)
+	with hide('output','running','warnings'):
+		print ("Adding DHCP reservation for %s..." % mac)
+		run("PowerShell.exe -Command Add-DhcpServerv4Reservation -ScopeId %s -IPAddress %s -ClientId %s -Description %s -ReservationName %s" % (scope, ip, mac, hostname, hostname), shell=False, pty=False)
+		print ("Adding A and PTR records for %s (%s)..." % (hostname, ip))
+		run("PowerShell.exe Add-DnsServerResourceRecordA -ZoneName %s -Name %s -IPv4Address %s -CreatePtr" % (zone, hostname, ip), shell=False, pty=False)
 
 def restartServiceLinux(serviceName):
 	"""

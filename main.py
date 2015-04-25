@@ -45,6 +45,7 @@ def mainMenu():
 			user = raw_input("Username: ")
 			service = raw_input("Service name to restart: ")
 			subprocess.call(["fab -f fab_functions.py restartServiceLinux:%s --hosts=%s --user=%s" % (service, hostname, user)], shell=True)
+		# Ask user if they want to quit the script or return to the main menu
 		choice = askExitToMenu()
 	
 # Display the main menu with options
