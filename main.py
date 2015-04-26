@@ -36,7 +36,7 @@ def mainMenu():
 		print "Exit"
 		print "  q) Quit"
 		print "==============================\n"
-		choice = raw_input("Choice [1-10,q]: ")
+		choice = raw_input("Choice [1-11,q]: ")
 		choice = choice.lower()
 		clearScreen()
 		if choice == "q":
