@@ -35,6 +35,41 @@ def addHost(ip, mac, hostname, scope, zone):
 		print ("Adding A and PTR records for %s (%s)..." % (hostname, ip))
 		run("PowerShell.exe Add-DnsServerResourceRecordA -ZoneName %s -Name %s -IPv4Address %s -CreatePtr" % (zone, hostname, ip), shell=False, pty=False)
 
+def addHostDNS(ip, hostname, zone):
+	"""
+	;Description - Adds a host to DNS on a Windows box.
+	;Params
+	;	ip - IP address of the new host (new reservation)
+	;	hostname - Name of the new host
+	;	zone - DNS zone name
+	"""
+	with hide('output','running','warnings'):
+		print ("Adding A and PTR records for %s (%s)..." % (hostname, ip))
+		run("PowerShell.exe Add-DnsServerResourceRecordA -ZoneName %s -Name %s -IPv4Address %s -CreatePtr" % (zone, hostname, ip), shell=False, pty=False)
+		
+def addHostDHCP(ip, mac, hostname, scope):
+	"""
+	;Description - Adds a host to DHCP on a Windows box.
+	;Params
+	;	ip - IP address of the new host (new reservation)
+	;	mac - MAC address of the new host
+	;	hostname - Name of the new host
+	;	scope - DHCP scope name
+	"""
+	with hide('output','running','warnings'):
+		print ("Adding DHCP reservation for %s..." % mac)
+		run("PowerShell.exe -Command Add-DhcpServerv4Reservation -ScopeId %s -IPAddress %s -ClientId %s -Description %s -ReservationName %s" % (scope, ip, mac, hostname, hostname), shell=False, pty=False)
+
+def addADAccount(userToAdd, additionalOptions):
+	"""
+	;Description - Adds a user to AD.
+	;Params
+	;	userToAdd - Username for the new user
+	;	additionalOptions - Additional PowerShell arguments if you want/need
+	"""
+	print ("Adding %s to AD..." % userToAdd)
+	run("PowerShell.exe -Command New-ADUser %s %s" % (userToAdd, additionalOptions), shell=False, pty=False)
+
 def restartServiceLinux(serviceName):
 	"""
 	;Description - Restarts a Linux service by name.

@@ -43,8 +43,14 @@ def mainMenu():
 			goodbye()
 		elif choice == "1":
 			addHostDHCPDNS()
+		elif choice == "2":
+			addHostDNS()
+		elif choice == "3":
+			addHostDHCP()
 		elif choice == "4":
 			viewDHCPReservations()
+		elif choice == "5":
+			addADAccount()
 		elif choice == "6":
 			unlockADAccount()
 		elif choice == "7":

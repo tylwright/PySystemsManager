@@ -99,6 +99,43 @@ def addHostDHCPDNS():
 		else:
 			addHost = False
 
+def addHostDNS():
+	"""
+	;Description - Asks user for hostname and IP.  Adds info to Windows DNS records.
+	"""
+	serverName, serverUser, serverUserPass = getWindowsCredentials()
+	addHost = True
+	while addHost:
+		hostname = raw_input("Hostname: ")
+		ip = raw_input("IP: ")
+		zone = raw_input("DNS Zone Name (ex. mycompany.corp): ")
+		subprocess.call(["fab -f fab_functions.py addHostDNS:%s,%s,%s --hosts=%s --user=%s --password=%s" % (ip, hostname, zone, serverName, serverUser, serverUserPass)], shell=True)
+		addHost = raw_input("%s, would you like to add another DNS record to %s? [Y/N]" % (serverUser, serverName))
+		addHost = addHost.lower()
+		if addHost == "y":
+			addHost = True
+		else:
+			addHost = False
+
+def addHostDHCP():
+	"""
+	;Description - Asks user for hostname, MAC, and IP.  Adds info to Windows DHCP.
+	"""
+	serverName, serverUser, serverUserPass = getWindowsCredentials()
+	addHost = True
+	while addHost:
+		hostname = raw_input("Hostname: ")
+		mac = getMAC()
+		ip = raw_input("IP: ")
+		scope = raw_input("DHCP Scope for Reservation (ex. 10.1.1.0): ")
+		subprocess.call(["fab -f fab_functions.py addHostDHCP:%s,%s,%s,%s --hosts=%s --user=%s --password=%s" % (ip, mac, hostname, scope, serverName, serverUser, serverUserPass)], shell=True)
+		addHost = raw_input("%s, would you like to add another DHCP reservation to %s? [Y/N]" % (serverUser, serverName))
+		addHost = addHost.lower()
+		if addHost == "y":
+			addHost = True
+		else:
+			addHost = False
+
 def viewDHCPReservations():
 	"""
 	;Description - Prints an IPv4 DHCP scope from a Windows box.
@@ -129,6 +166,15 @@ def unlockADAccount():
 	serverName, serverUser, serverUserPass = getWindowsCredentials()
 	userToUnlock = raw_input("Username to unlock: ")
 	subprocess.call(["fab -f fab_functions.py unlockADAccount:%s --hosts=%s --user=%s --password=%s" % (userToUnlock, serverName, serverUser, serverUserPass)], shell=True)
+
+def addADAccount():
+	"""
+	;Description - Adds a user to Active Directory.
+	"""
+	serverName, serverUser, serverUserPass = getWindowsCredentials()
+	userToAdd = raw_input("Username to add: ")
+	additionalOptions = raw_input("Additional PowerShell Arguments (if wanted): ")
+	subprocess.call(["fab -f fab_functions.py addADAccount:%s,%s --hosts=%s --user=%s --password=%s" % (userToAdd, additionalOptions, serverName, serverUser, serverUserPass)], shell=True)
 
 def askExitToMenu():
 	"""
