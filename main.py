@@ -19,32 +19,46 @@ def mainMenu():
 		print "  1) Add host to DHCP and DNS"
 		print "  2) Add DNS record"
 		print "  3) Add DHCP reservation"
-		print "  4) View DHCP Reservations"
+		print "  4) View DHCP reservations"
+		print " Active Directory"
+		print "  5) Add user to AD"
+		print "  6) Unlock AD account"
+		print "  7) Disable AD account"
 		print " Hyper-V"
-		print "  5) View a list of VMs"
+		print "  8) View a list of VMs"
 		print "Linux"
 		print " Services"
-		print "  6) Restart a service by name"
+		print "  9) Restart a service by name"
+		print " Host"
+		print "  10) Restart host"
+		print "  11) Shutdown host"
 		print "=============================="
 		print "Exit"
 		print "  q) Quit"
 		print "==============================\n"
-		choice = raw_input("Choice: ")
+		choice = raw_input("Choice [1-10,q]: ")
 		choice = choice.lower()
 		clearScreen()
 		if choice == "q":
 			goodbye()
-		if choice == "1":
+		elif choice == "1":
 			addHostDHCPDNS()
-		if choice == "4":
+		elif choice == "4":
 			viewDHCPReservations()
-		if choice == "5":
+		elif choice == "6":
+			unlockADAccount()
+		elif choice == "7":
+			disableADAccount()
+		elif choice == "8":
 			getVMsList()
-		if choice == "6":
-			hostname = raw_input("IP or Hostname: ")
-			user = raw_input("Username: ")
-			service = raw_input("Service name to restart: ")
-			subprocess.call(["fab -f fab_functions.py restartServiceLinux:%s --hosts=%s --user=%s" % (service, hostname, user)], shell=True)
+		elif choice == "9":
+			restartLinuxService()
+		elif choice == "10":
+			restartLinuxBox()
+		elif choice == "11":
+			shutdownLinuxBox()
+		else:
+			print "Invalid choice"
 		# Ask user if they want to quit the script or return to the main menu
 		choice = askExitToMenu()
 	

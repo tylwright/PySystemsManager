@@ -13,7 +13,6 @@ def clearScreen():
 	;Description - Clears console of any text
 	"""
 	os.system("clear")
-	
 
 def getWindowsCredentials():
 	"""
@@ -21,14 +20,33 @@ def getWindowsCredentials():
 	;Returns
 	;	serverName - IP or hostname of Windows box
 	;	serverUser - Username used to login to Windows box over SSH
-	;	serverPass - Password used to login to Windows box over SSH
+	;	serverUserPass - Password used to login to Windows box over SSH
 	"""
 	serverName = raw_input("Windows Server IP or Hostname: ")
 	serverUser = raw_input("Windows Server Username: ")
 	serverUserPass = getpass.getpass("Password for %s: " % serverUser)
 	return (serverName, serverUser, serverUserPass)
 
+def getLinuxCredentials():
+	"""
+	;Description - Prompts user for Windows box IP and user credentials
+	;Returns
+	;	linuxName - IP or hostname of Windows box
+	;	linuxUser - Username used to login to Windows box over SSH
+	;	linuxUserPass - Password used to login to Windows box over SSH
+	"""
+	linuxName = raw_input("Linux Box IP or Hostname: ")
+	linuxUser = raw_input("Linux Box Username: ")
+	linuxUserPass = getpass.getpass("Linux Password for %s: " % linuxUser)
+	return (linuxName, linuxUser, linuxUserPass)
+
+
 def getMAC():
+	"""
+	;Description - Asks user for a MAC address and checks to see if it follows the correct format.
+	;Returns
+	;	mac - MAC address stripped of ":" or "-"
+	"""
 	mac = raw_input("MAC Address: ")
 	mac = mac.lower()
 	mac = re.sub('[-:]', '', mac)
@@ -37,6 +55,29 @@ def getMAC():
 	else:
 		print "Invalid MAC"
 		getMAC()
+
+def restartLinuxService():
+	"""
+	;Description - Restarts a service (of the users choice) on a Linux box
+	"""
+	linuxName, linuxUser, linuxUserPass = getLinuxCredentials()
+	serviceName = raw_input("Service name: ")
+	print "Restarting %s on %s" % (serviceName, linuxName)
+	subprocess.call(["fab -f fab_functions.py restartServiceLinux:%s --hosts=%s --user=%s --password=%s" % (serviceName, linuxName, linuxUser, linuxUserPass)], shell=True)
+
+def restartLinuxBox():
+	"""
+	;Description - Restarts a Linux box
+	"""
+	linuxName, linuxUser, linuxUserPass = getLinuxCredentials()
+	subprocess.call(["fab -f fab_functions.py restartLinuxBox --hosts=%s --user=%s --password=%s" % (linuxName, linuxUser, linuxUserPass)], shell=True)
+
+def shutdownLinuxBox():
+	"""
+	;Description - Shuts down a Linux box
+	"""
+	linuxName, linuxUser, linuxUserPass = getLinuxCredentials()
+	subprocess.call(["fab -f fab_functions.py shutdownLinuxBox --hosts=%s --user=%s --password=%s" % (linuxName, linuxUser, linuxUserPass)], shell=True)	
 
 def addHostDHCPDNS():
 	"""
@@ -72,6 +113,22 @@ def getVMsList():
 	"""
 	serverName, serverUser, serverUserPass = getWindowsCredentials()
 	subprocess.call(["fab -f fab_functions.py getVMs --hosts=%s --user=%s --password=%s" % (serverName, serverUser, serverUserPass)], shell=True)
+
+def disableADAccount():
+	"""
+	;Description - Disables a user account in Active Directory.
+	"""
+	serverName, serverUser, serverUserPass = getWindowsCredentials()
+	userToDisable = raw_input("Username to disable: ")
+	subprocess.call(["fab -f fab_functions.py disableADAccount:%s --hosts=%s --user=%s --password=%s" % (userToDisable, serverName, serverUser, serverUserPass)], shell=True)
+	
+def unlockADAccount():
+	"""
+	;Description - Unlocks a user account in Active Directory.
+	"""
+	serverName, serverUser, serverUserPass = getWindowsCredentials()
+	userToUnlock = raw_input("Username to unlock: ")
+	subprocess.call(["fab -f fab_functions.py unlockADAccount:%s --hosts=%s --user=%s --password=%s" % (userToUnlock, serverName, serverUser, serverUserPass)], shell=True)
 
 def askExitToMenu():
 	"""
